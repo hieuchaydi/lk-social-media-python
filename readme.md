@@ -1,164 +1,191 @@
- lk - Ứng dụng mạng xã hội mini với Flask
+# lk - Ứng dụng Mạng Xã Hội Mini với Flask
 
-![lk Logo](assets/logo.png)
+![Logo lk](assets/logo.png)
 
-lk là một ứng dụng mạng xã hội mini được phát triển bằng Python và Flask. Ứng dụng hỗ trợ đăng nhập bằng Google, đăng bài viết có ảnh, kết bạn, bình luận, nhắn tin thời gian thực và gọi video.
+**lk** là một ứng dụng mạng xã hội nhỏ gọn được phát triển bằng **Python** và **Flask**. Ứng dụng hỗ trợ các tính năng như đăng nhập bằng Google OAuth, đăng bài kèm ảnh, kết bạn, nhắn tin thời gian thực và gọi video.
 
 ---
-[![Live Demo](https://img.shields.io/badge/Demo-Live%20Site-brightgreen)](https://lk-5db7.onrender.com)
-![Render Status](https://img.shields.io/website?down_message=offline&label=Render&up_message=online&url=https%3A%2F%2Flk-5db7.onrender.com)
 
-**🌐 Truy cập ứng dụng ngay:** [https://lk-5db7.onrender.com](https://lk-5db7.onrender.com)
+[![Demo Trực Tiếp](https://img.shields.io/badge/Demo-Truy%20cập%20trực%20tiếp-brightgreen)](https://lk-5db7.onrender.com)
+![Trạng Thái Render](https://img.shields.io/website?down_message=offline&label=Render&up_message=online&url=https%3A%2F%2Flk-5db7.onrender.com)
 
-## Các chức năng chính
+🌐 **Truy cập ngay:** [https://lk-5db7.onrender.com](https://lk-5db7.onrender.com)
 
-### 1. Đăng nhập / Đăng ký (Login / Register)
-- Hỗ trợ đăng nhập bằng Google OAuth 2.0 với ảnh đại diện người dùng
-- Callback URL: `http://127.0.0.1:5000/google/callback`
-- Đăng ký tài khoản thông thường với xác thực email
+## ✨ Các Tính Năng Chính
 
-![Đăng nhập](assets/dangnhapgoogle.png)
-![Đăng ký](assets/dangki.png)
+### 1. Đăng Nhập / Đăng Ký
+- **Đăng nhập/Đăng ký**: Đăng nhập bằng Google OAuth 2.0 (kèm ảnh đại diện) hoặc đăng ký bằng xác thực email.
+- URL Callback Google: `http://127.0.0.1:5000/google/callback`
 
-### 2. Trang cá nhân (Profile)
-- Quản lý thông tin cá nhân và ảnh đại diện
-- Xem bài viết và bạn bè
-- Thống kê tương tác
+  ![Đăng Nhập](assets/dangnhapgoogle.png)  
+  ![Đăng Ký](assets/dangki.png)
 
-![Trang cá nhân](assets/profile.png)
+### 2. Trang Cá Nhân
+- Quản lý thông tin cá nhân và ảnh đại diện.
+- Xem bài viết và danh sách bạn bè.
+- Thống kê tương tác.
 
-### 3. Bảng tin (News Feed)
-- Hiển thị bài viết theo thuật toán
-- Tương tác like/comment
-- Bài viết nổi bật
+  ![Trang Cá Nhân](assets/profile.png)
 
-![Bảng tin](assets/newsfeed.png)
+### 3. Bảng Tin
+- Hiển thị bài viết theo thuật toán.
+- Tương tác thích và bình luận.
+- Bài viết nổi bật.
 
-### 4. Đăng bài viết (Create Post)
-- Đăng bài với hình ảnh và nội dung
-- Định dạng bài viết phong phú
-- Tag bạn bè
+  ![Bảng Tin](assets/newsfeed.png)
 
-![Đăng bài](assets/dangbai.png)
+### 4. Đăng Bài Viết
+- Chia sẻ bài viết kèm hình ảnh và định dạng văn bản phong phú.
+- Gắn thẻ bạn bè trong bài viết.
 
-### 5. Tương tác bài viết
-- Bình luận và trả lời bình luận
-- Biểu tượng cảm xúc
+  ![Đăng Bài](assets/dangbai.png)
 
-![Bình luận](assets/binhluan.png)
+### 5. Tương Tác Bài Viết
+- Bình luận và trả lời bình luận.
+- Sử dụng biểu tượng cảm xúc.
 
-### 6. Kết bạn (Friends)
-- Tìm kiếm bạn bè
-- Gửi lời mời kết bạn
-- Quản lý danh sách bạn bè
+  ![Bình Luận](assets/binhluan.png)
 
-![Danh sách bạn](assets/danhsachban.png)
-![Lời mời kết bạn](assets/loimoiketban.png)
+### 6. Kết Bạn
+- Tìm kiếm bạn bè.
+- Gửi và quản lý lời mời kết bạn.
+- Xem danh sách bạn bè.
 
-### 7. Nhắn tin (Messaging)
-- Chat real-time với bạn bè
-- Gửi hình ảnh và file
-- Thông báo tin nhắn mới
+  ![Danh Sách Bạn](assets/danhsachban.png)  
+  ![Lời Mời Kết Bạn](assets/loimoiketban.png)
 
-![Nhắn tin](assets/nhantin.png)
+### 7. Nhắn Tin
+- Trò chuyện thời gian thực với bạn bè.
+- Gửi hình ảnh và tệp tin.
+- Thông báo tin nhắn mới.
 
-### 8. Gọi video (Video Call)
-- Gọi video trực tiếp với bạn bè
-- Chất lượng HD
-- Tính năng chia sẻ màn hình
+  ![Nhắn Tin](assets/nhantin.png)
 
-![Gọi điện](assets/goidien.png)
+### 8. Gọi Video
+- Gọi video trực tiếp với bạn bè.
+- Chất lượng video HD.
+- Tính năng chia sẻ màn hình.
 
-### 9. Tìm kiếm (Search)
-- Tìm kiếm bài viết
-- Tìm kiếm người dùng
-- Bộ lọc nâng cao
+  ![Gọi Video](assets/goidien.png)
 
-![Tìm kiếm](assets/timkiem.png)
-![Tìm bạn](assets/timkiembanthan.png)
+### 9. Tìm Kiếm
+- Tìm kiếm bài viết và người dùng.
+- Bộ lọc tìm kiếm nâng cao.
 
+  ![Tìm Kiếm](assets/timkiem.png)  
+  ![Tìm Bạn](assets/timkiembanthan.png)
 
-### 10. quản lý
-- trang quản lý
-![Quản lý](assets/quanli.png)
-- quản lý bài viết
-![bài viết](assets/quanlibaiviet.png)
-- quản lý bình luận
-![Bình luận](assets/quanlybinhluan.png)
+### 10. Quản Lý
+- Bảng điều khiển quản trị để quản lý nội dung.
+- Quản lý bài viết và bình luận.
 
+  ![Bảng Quản Lý](assets/quanli.png)  
+  ![Quản Lý Bài Viết](assets/quanlibaiviet.png)  
+  ![Quản Lý Bình Luận](assets/quanlybinhluan.png)
 
+---
 
+## 🛠️ Hướng Dẫn Cài Đặt
 
+### 1. Tải Mã Nguồn
+```bash
+git clone https://github.com/hieuchaydi/lk-social.git
+cd lk-social
+```
 
-
-### Cài đặt
-
-1. Clone repo:
-    ```bash
-    git clone <[repository-url](https://github.com/hieuchaydi/lk-social.git)>
-    cd lk-social
-    ```
-
-
-
-
-### 2. (Tuỳ chọn) Tạo môi trường ảo
-
+### 2. (Tùy Chọn) Tạo Môi Trường Ảo
 ```bash
 python -m venv venv
 # Kích hoạt môi trường ảo:
-source venv/bin/activate    # macOS / Linux
+source venv/bin/activate    # macOS/Linux
 venv\Scripts\activate       # Windows
 ```
 
-### 3. Cài đặt thư viện phụ thuộc
-
+### 3. Cài Đặt Thư Viện
 ```bash
 pip install -r requirements.txt
 ```
 
----
-
-## 🗃️ Migrate database
-
+### 4. Thiết Lập Cơ Sở Dữ Liệu
 ```bash
 flask db init
-flask db migrate -m "Tạo cấu trúc database ban đầu"
+flask db migrate -m "Tạo cấu trúc cơ sở dữ liệu ban đầu"
 flask db upgrade
 ```
 
-> ⚠️ Nếu đã init database rồi thì **không cần chạy lại** `flask db init`.
+> ⚠️ **Lưu ý**: Bỏ qua lệnh `flask db init` nếu cơ sở dữ liệu đã được khởi tạo trước đó.
 
----
+### 5. Chạy Ứng Dụng
+Chọn một trong hai cách sau:
 
-## 🚀 Chạy ứng dụng
-
-Bạn có thể chạy ứng dụng theo 1 trong 2 cách sau:
-
-### ✅ Cách 1: Chạy bằng `python run.py`
-
+#### Cách 1: Sử dụng `run.py`
 ```bash
 python run.py
 ```
 
-### ✅ Cách 2: Chạy bằng `flask run`
-
+#### Cách 2: Sử dụng Flask CLI
 ```bash
 flask run --host=0.0.0.0 --port=5000
 ```
 
----
-
-## ✅ Hoàn tất
-
-Sau khi chạy, mở trình duyệt và truy cập:
-
+### 6. Truy Cập Ứng Dụng
+Mở trình duyệt và truy cập:
 ```
 http://localhost:5000/
 ```
 
 ---
 
+## 🔑 Thiết Lập Google OAuth
 
+### 1. Tạo Dự Án trên Google Cloud Console
+1. Truy cập [Google Cloud Console](https://console.cloud.google.com/).
+2. Tạo dự án mới:
+   - Nhấn vào menu dropdown ở góc trên bên trái → **New Project**.
+3. Vào **APIs & Services** > **OAuth consent screen**:
+   - Chọn loại người dùng **External**.
+   - Cung cấp thông tin:
+     - **Tên ứng dụng**: `My Flask App`
+     - **Email hỗ trợ người dùng**: `your_email@gmail.com`
+     - **Email liên hệ nhà phát triển**: `your_email@gmail.com`
+     - **Logo**: (Tùy chọn)
+   - Thêm **Authorized domains**: `127.0.0.1`
+   - Thêm **Scopes**:
+     - `email`
+     - `profile`
+     - `openid`
+   - Lưu cài đặt.
 
-**Cảm ơn bạn đã sử dụng lk!**
+### 2. Tạo OAuth Client ID
+1. Vào **APIs & Services** > **Credentials**.
+2. Nhấn **Create Credentials** → **OAuth Client ID**.
+3. Chọn loại ứng dụng **Web application**.
+4. Thêm **Authorized redirect URI**:
+   ```
+   http://127.0.0.1:5000/google/callback
+   ```
+5. Sau khi tạo, bạn sẽ nhận được:
+   - **Client ID**: `your-client-id.apps.googleusercontent.com`
+   - **Client Secret**: `your-client-secret`
+
+### 3. Cấu Hình OAuth trong Ứng Dụng
+Trong tệp `routes.py`, cập nhật cấu hình Google OAuth với thông tin của bạn:
+```python
+google = oauth.register(
+    name='google',
+    client_id='your-client-id',
+    client_secret='your-client-secret',
+    server_metadata_url='https://accounts.google.com/.well-known/openid-configuration',
+    client_kwargs={
+        'scope': 'openid email profile',
+        'prompt': 'consent',
+        'access_type': 'offline'
+    }
+)
+```
+
+---
+
+## 🙌 Cảm Ơn Bạn Đã Sử Dụng lk!
+
+Nếu bạn gặp vấn đề hoặc có đề xuất, vui lòng tạo issue trên [kho lưu trữ GitHub](https://github.com/hieuchaydi/lk-social).

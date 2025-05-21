@@ -91,13 +91,6 @@ lk là một ứng dụng mạng xã hội mini được phát triển bằng Py
 
 
 
-## Hướng dẫn cài đặt và chạy ứng dụng
-
-### Yêu cầu
-- Python 3.8+
-- Virtualenv (tùy chọn nhưng khuyến nghị)
-- SQLite3
-
 ### Cài đặt
 
 1. Clone repo:
@@ -106,60 +99,65 @@ lk là một ứng dụng mạng xã hội mini được phát triển bằng Py
     cd lk-social
     ```
 
-1.1 mô hinh :
-lk/
-├── app/
-│   ├── admin/                     # Thêm thư mục admin
-│   │   ├── __init__.py
-│   │   ├── routes.py              # Routes cho admin
-│   │   ├── forms.py               # Forms đặc thù cho admin
-│   │   └── templates/             # Templates riêng cho admin
-│   │       ├── admin_base.html    # Base template cho admin
-│   │       ├── dashboard.html
-│   │       ├── users.html
-│   │       ├── edit_user.html
-│   │       ├── posts.html
-│   ├── __init__.py
-│   ├── forms.py
-│   ├── models.py
-│   ├── routes.py
-│   ├── static/
-│   │   ├── admin/                 # Thêm thư mục static cho admin
-│   │   │   ├── css/
-│   │   │   └── js/
-│   │   ├── avatars/
-│   │   │   └── default.jpg
-│   │   ├── css/
-│   │   │   └── style.css
-│   │   ├── js/
-│   │   │   ├── auth.js
-│   │   │   ├── comments.js
-│   │   │   ├── helpers.js
-│   │   │   └── script.js
-│   │   └── uploads/
-│   ├── templates/
-│   │   ├── base.html
-│   │   ├── chat.html
-│   │   ├── create_post.html
-│   │   ├── feed.html
-│   │   ├── friend_requests.html
-│   │   ├── friends.html
-│   │   ├── home.html
-│   │   ├── login.html
-│   │   ├── messages_home.html
-│   │   ├── messages.html
-│   │   ├── posts.html
-│   │   ├── profile.html
-│   │   ├── received_messages.html
-│   │   ├── register.html
-│   │   ├── search_friends.html
-│   │   └── send_message.html
-│   └── __pycache__/
-├── instance/
-│   └── aihub.db
-|──run.py
-|── config.py
 
+
+
+### 2. (Tuỳ chọn) Tạo môi trường ảo
+
+```bash
+python -m venv venv
+# Kích hoạt môi trường ảo:
+source venv/bin/activate    # macOS / Linux
+venv\Scripts\activate       # Windows
+```
+
+### 3. Cài đặt thư viện phụ thuộc
+
+```bash
+pip install -r requirements.txt
+```
+
+---
+
+## 🗃️ Migrate database
+
+```bash
+flask db init
+flask db migrate -m "Tạo cấu trúc database ban đầu"
+flask db upgrade
+```
+
+> ⚠️ Nếu đã init database rồi thì **không cần chạy lại** `flask db init`.
+
+---
+
+## 🚀 Chạy ứng dụng
+
+Bạn có thể chạy ứng dụng theo 1 trong 2 cách sau:
+
+### ✅ Cách 1: Chạy bằng `python run.py`
+
+```bash
+python run.py
+```
+
+### ✅ Cách 2: Chạy bằng `flask run`
+
+```bash
+flask run --host=0.0.0.0 --port=5000
+```
+
+---
+
+## ✅ Hoàn tất
+
+Sau khi chạy, mở trình duyệt và truy cập:
+
+```
+http://localhost:5000/
+```
+
+---
 
 ---
 

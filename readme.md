@@ -188,4 +188,4 @@ google = oauth.register(
 
 ## 🙌 Cảm Ơn Bạn Đã Sử Dụng lk!
 
-Nếu bạn gặp vấn đề hoặc có đề xuất, vui lòng tạo issue trên [kho lưu trữ GitHub](https://github.com/hieuchaydi/lk-social).
+Nếu bạn gặp vấn đề hoặc có đề xuất, vui lòng tạo issue trên [kho lưu trữ GitHub](https://github.com/hieuchaydi/lk-social-media).

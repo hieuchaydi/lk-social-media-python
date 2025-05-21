@@ -185,6 +185,26 @@ google = oauth.register(
 ```
 
 ---
+## 📚 Tài liệu tham khảo
+
+📘 **Flask Documentation**  
+🔗 [https://flask.palletsprojects.com/en/stable/](https://flask.palletsprojects.com/en/stable/)  
+Hướng dẫn chính thức để xây dựng ứng dụng web với Flask.
+
+🐍 **Python Documentation**  
+🔗 [https://docs.python.org/3/](https://docs.python.org/3/)  
+Tài liệu chuẩn của Python, bao gồm cú pháp, thư viện và ví dụ.
+
+## 🔐 Bảo mật
+
+Dự án này áp dụng một số cơ chế bảo mật cơ bản:
+
+- 🛡️ **CSRF Protection**: Sử dụng `Flask-WTF` để bảo vệ ứng dụng khỏi các cuộc tấn công Cross-Site Request Forgery (CSRF).
+- 🔑 **Mã hóa mật khẩu**: Dùng thư viện `bcrypt` để mã hóa mật khẩu người dùng một cách an toàn trước khi lưu vào cơ sở dữ liệu.
+
+> ✅ Đây là những bước bảo mật quan trọng giúp bảo vệ người dùng và ứng dụng khỏi các lỗ hổng phổ biến.
+
+
 
 ## 🙌 Cảm Ơn Bạn Đã Sử Dụng lk!
 

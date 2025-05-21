@@ -78,7 +78,7 @@ lk là một ứng dụng mạng xã hội mini được phát triển bằng Py
 ![Tìm bạn](assets/timkiembanthan.png)
 
 
-### 9. quản lý
+### 10. quản lý
 - trang quản lý
 ![Quản lý](assets/quanli.png)
 - quản lý bài viết
@@ -88,25 +88,6 @@ lk là một ứng dụng mạng xã hội mini được phát triển bằng Py
 
 
 
-
-### 9. Tìm kiếm (Search)
-- Tìm kiếm bài viết
-- Tìm kiếm người dùng
-- Bộ lọc nâng cao
-
-![Tìm kiếm](assets/timkiem.png)
-![Tìm bạn](assets/timkiembanthan.png)
-
-
-
----
-### 9. Tìm kiếm (Search)
-- Tìm kiếm bài viết
-- Tìm kiếm người dùng
-- Bộ lọc nâng cao
-
-![Tìm kiếm](assets/timkiem.png)
-![Tìm bạn](assets/timkiembanthan.png)
 
 
 

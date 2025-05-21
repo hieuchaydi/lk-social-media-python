@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Tìm kiếm bạn bè</h2>
+
+<form method="get" action="{{ url_for('main.search_friends') }}">
+    <input type="text" name="q" value="{{ request.args.get('q', '') }}" placeholder="Tìm kiếm theo tên người dùng">
+    <button type="submit">Tìm</button>
+</form>
+
+{% if users %}
+    <ul>
+    {% for user in users %}
+        <li>
+            {{ user.username }}
+            
+            {% set friendship = None %}
+            {% for f in friendships %}
+                {% if (f.user_id == current_user.id and f.friend_id == user.id) or (f.user_id == user.id and f.friend_id == current_user.id) %}
+                    {% set friendship = f %}
+                {% endif %}
+            {% endfor %}
+
+            {% if user.id == current_user.id %}
+                <em>(Bạn)</em>
+            {% elif friendship %}
+                {% if friendship.status == 'accepted' %}
+                    <span class="badge bg-success">Đã là bạn bè</span>
+                {% elif friendship.status == 'pending' %}
+                    <span class="badge bg-warning">Đã gửi lời mời</span>
+                {% elif friendship.status == 'rejected' %}
+                    <span class="badge bg-secondary">Lời mời bị từ chối</span>
+                {% endif %}
+            {% else %}
+                <form action="{{ url_for('main.send_friend_request', user_id=user.id) }}" method="post" style="display:inline;">
+                    {{ form.hidden_tag() }}
+                    <button type="submit" class="btn btn-primary btn-sm">Gửi lời mời</button>
+                </form>
+            {% endif %}
+        </li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>Không tìm thấy người dùng nào.</p>
+{% endif %}
+{% endblock %}

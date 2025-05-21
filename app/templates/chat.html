@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Nhắn tin với {{ friend.username }}</h2>
+
+<div class="chat-box" style="border:1px solid #ccc; padding:10px; height:400px; overflow-y:auto; margin-bottom:10px; background:#f9f9f9;">
+  {% for msg in messages %}
+    <div style="margin:5px 0; text-align: {{ 'right' if msg.sender_id == current_user.id else 'left' }};">
+      <div style="
+          display: inline-block; 
+          padding: 8px 12px; 
+          border-radius: 15px; 
+          max-width: 70%;
+          background-color: {{ '#d1e7dd' if msg.sender_id == current_user.id else '#e2e3e5' }};
+          color: #333;
+          ">
+        <strong>{{ 'Bạn' if msg.sender_id == current_user.id else friend.username }}</strong><br>
+        {{ msg.content|e }}<br>
+        <small style="color:gray;">{{ msg.timestamp.strftime('%d/%m/%Y %H:%M') if msg.timestamp else 'N/A' }}</small>
+      </div>
+    </div>
+  {% else %}
+    <p>Chưa có tin nhắn nào với {{ friend.username }}.</p>
+  {% endfor %}
+</div>
+
+<form method="POST" action="{{ url_for('main.chat', friend_id=friend.id) }}">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+  <textarea name="content" rows="3" class="form-control" placeholder="Nhập tin nhắn..." required></textarea><br>
+  <button type="submit" class="btn btn-success">Gửi</button>
+</form>
+
+{% endblock %}

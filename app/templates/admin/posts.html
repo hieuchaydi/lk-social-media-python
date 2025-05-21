@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Quản lý bài viết</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto p-4">
+        <h1 class="text-2xl font-bold mb-4">Quản lý bài viết</h1>
+        <table class="w-full bg-white rounded shadow">
+            <thead>
+                <tr class="bg-gray-200">
+                    <th class="p-2">ID</th>
+                    <th class="p-2">Người đăng</th>
+                    <th class="p-2">Nội dung</th>
+                    <th class="p-2">Ngày tạo</th>
+                    <th class="p-2">Hành động</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for post in posts.items %}
+                <tr>
+                    <td class="p-2">{{ post.id }}</td>
+                    <td class="p-2">{{ post.user.username }}</td>
+                    <td class="p-2">{{ post.content[:100] }}...</td>
+                    <td class="p-2">{{ post.created_at_hn.strftime('%Y-%m-%d %H:%M:%S') if post.created_at_hn else 'N/A' }}</td>
+                    <td class="p-2">
+                        <form method="POST" action="{{ url_for('admin.delete_post', post_id=post.id) }}">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                            <button type="submit" class="bg-red-500 text-white px-2 py-1 rounded">Xóa</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <!-- Pagination -->
+        <div class="mt-4">
+            {% if posts.has_prev %}
+            <a href="{{ url_for('admin.manage_posts', page=posts.prev_num) }}" class="bg-blue-500 text-white px-4 py-2 rounded">Trang trước</a>
+            {% endif %}
+            {% if posts.has_next %}
+            <a href="{{ url_for('admin.manage_posts', page=posts.next_num) }}" class="bg-blue-500 text-white px-4 py-2 rounded">Trang sau</a>
+            {% endif %}
+            <a href="{{ url_for('admin.dashboard') }}" class="bg-gray-500 text-white px-4 py-2 rounded">Quay lại Dashboard</a>
+        </div>
+    </div>
+</body>
+</html>

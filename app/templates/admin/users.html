@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Quản lý người dùng</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto p-4">
+        <h1 class="text-2xl font-bold mb-4">Quản lý người dùng</h1>
+        <table class="w-full bg-white rounded shadow">
+            <thead>
+                <tr class="bg-gray-200">
+                    <th class="p-2">ID</th>
+                    <th class="p-2">Tên người dùng</th>
+                    <th class="p-2">Email</th>
+                    <th class="p-2">Trạng thái</th>
+                    <th class="p-2">Quyền</th>
+                    <th class="p-2">Hành động</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users.items %}
+                <tr>
+                    <td class="p-2">{{ user.id }}</td>
+                    <td class="p-2">{{ user.username }}</td>
+                    <td class="p-2">{{ user.email }}</td>
+                    <td class="p-2">{{ 'Hoạt động' if user.is_active else 'Vô hiệu' }}</td>
+                    <td class="p-2">{{ 'Admin' if user.is_admin else 'Thường' }}</td>
+                    <td class="p-2">
+                        <form method="POST" action="{{ url_for('admin.toggle_user_active', user_id=user.id) }}" class="inline">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                            <button type="submit" class="bg-{{ 'red' if user.is_active else 'green' }}-500 text-white px-2 py-1 rounded">
+                                {{ 'Vô hiệu hóa' if user.is_active else 'Kích hoạt' }}
+                            </button>
+                        </form>
+                        <form method="POST" action="{{ url_for('admin.toggle_user_admin', user_id=user.id) }}" class="inline">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                            <button type="submit" class="bg-{{ 'orange' if user.is_admin else 'blue' }}-500 text-white px-2 py-1 rounded">
+                                {{ 'Xóa quyền admin' if user.is_admin else 'Cấp quyền admin' }}
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <!-- Pagination -->
+        <div class="mt-4">
+            {% if users.has_prev %}
+            <a href="{{ url_for('admin.manage_users', page=users.prev_num) }}" class="bg-blue-500 text-white px-4 py-2 rounded">Trang trước</a>
+            {% endif %}
+            {% if users.has_next %}
+            <a href="{{ url_for('admin.manage_users', page=users.next_num) }}" class="bg-blue-500 text-white px-4 py-2 rounded">Trang sau</a>
+            {% endif %}
+            <a href="{{ url_for('admin.dashboard') }}" class="bg-gray-500 text-white px-4 py-2 rounded">Quay lại Dashboard</a>
+        </div>
+    </div>
+</body>
+</html>

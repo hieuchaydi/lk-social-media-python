@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="post-detail">
+    <h2>{{ post.title }}</h2>
+    <p>{{ post.content }}</p>
+    <p>❤️ {{ post.likes }} lượt thích</p>
+    {% if post.created_at_hn %}
+      <p><i>🕒 Đăng lúc: {{ post.created_at_hn.strftime('%H:%M %d/%m/%Y') }}</i></p>
+    {% endif %}
+    <a href="{{ url_for('main.list_posts') }}">⬅ Quay lại danh sách</a>
+  </div>
+{% endblock %}

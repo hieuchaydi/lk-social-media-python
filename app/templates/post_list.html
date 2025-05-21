@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>📚 Bài viết nổi bật</h2>
+
+{% for post in posts.items %}
+  <div class="post-card">
+    <h3>{{ post.title }}</h3>
+    <p>{{ post.content[:150] }}...</p>
+    <p>❤️ {{ post.likes }} lượt thích</p>
+    <a href="{{ url_for('main.post_detail', post_id=post.id) }}" class="btn">Xem chi tiết</a>
+  </div>
+{% else %}
+  <p>Không có bài viết nào.</p>
+{% endfor %}
+
+<!-- Pagination -->
+{% if posts.pages > 1 %}
+  <div class="pagination">
+    {% if posts.has_prev %}
+      <a href="{{ url_for('main.list_posts', page=posts.prev_num) }}">&laquo; Trang trước</a>
+    {% endif %}
+
+    <span>Trang {{ posts.page }} / {{ posts.pages }}</span>
+
+    {% if posts.has_next %}
+      <a href="{{ url_for('main.list_posts', page=posts.next_num) }}">Trang sau &raquo;</a>
+    {% endif %}
+  </div>
+{% endif %}
+{% endblock %}

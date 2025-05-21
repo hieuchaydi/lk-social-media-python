@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>📨 Hộp Thư Tin Nhắn</h2>
+
+{% if messages %}
+  <ul class="message-list" style="list-style: none; padding: 0;">
+    {% for msg in messages %}
+      <li class="message-item" style="border-bottom: 1px solid #ddd; padding: 12px 0;">
+        <div style="font-weight: bold;">👤 {{ msg.sender.username if msg.sender else "Người gửi không xác định" }}</div>
+        <div style="color: gray; font-size: 0.85em;">
+          🕒 
+          {% if msg.created_at %}
+            {{ msg.created_at.strftime('%d/%m/%Y %H:%M') }}
+          {% else %}
+            Không rõ thời gian
+          {% endif %}
+        </div>
+        <p style="margin: 8px 0;">{{ msg.content }}</p>
+        {% if not msg.read %}
+          <span style="color: red; font-weight: bold;">[Chưa đọc]</span>
+        {% endif %}
+      </li>
+    {% endfor %}
+  </ul>
+{% else %}
+  <p>📭 Bạn chưa có tin nhắn nào.</p>
+{% endif %}
+
+<hr>
+
+<h3>👥 Gửi tin nhắn mới</h3>
+<p>Chọn bạn để gửi tin:</p>
+<ul style="list-style: none; padding-left: 0;">
+  {% for friend in friends %}
+    <li style="margin-bottom: 8px;">
+      <span>{{ friend.username }}</span>
+      <a href="{{ url_for('main.send_message', receiver_id=friend.id) }}" class="btn btn-sm btn-outline-primary" style="margin-left: 10px;">Gửi tin nhắn</a>
+    </li>
+  {% endfor %}
+</ul>
+
+{% endblock %}

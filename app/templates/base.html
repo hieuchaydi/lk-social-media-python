@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>{% block title %}LK{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  {% block head %}{% endblock %}
+</head>
+<body>
+  <header class="navbar">
+    <div class="container">
+      <a href="{{ url_for('main.home') }}" class="logo">LK</a>
+      <nav class="nav-links">
+        {% if current_user.is_authenticated %}
+          <div class="user-info">
+            <img src="{{ url_for('static', filename='avatars/' + (current_user.avatar or 'default.jpg')) }}" alt="Avatar" class="avatar">
+            <a href="{{ url_for('main.profile') }}" class="username">Chào, {{ current_user.username }}!</a>
+          </div>
+          <a href="{{ url_for('main.feed') }}">📰 Bảng tin</a>
+          <a href="{{ url_for('main.create_post') }}" class="btn">➕ Đăng bài</a>
+          {% if current_user.is_admin %}
+            <a href="{{ url_for('admin.dashboard') }}" class="btn btn-admin">🛠️ Quản lý Admin</a>
+          {% endif %}
+          <a href="{{ url_for('main.logout') }}" class="btn">Đăng xuất</a>
+        {% else %}
+          <a href="{{ url_for('main.login') }}" class="btn">Đăng nhập</a>
+          <a href="{{ url_for('main.register') }}" class="btn btn-primary">Đăng ký</a>
+        {% endif %}
+        <button id="darkModeToggle" class="btn btn-toggle" title="Chuyển chế độ sáng/tối">
+          <span class="toggle-icon">🌙</span>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="main-content container">
+    {% block content %}{% endblock %}
+  </main>
+
+  <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+  {% block scripts %}{% endblock %}
+</body>
+</html>

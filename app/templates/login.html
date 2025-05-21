@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="auth-container">
+    <div class="auth-header">
+        <h2>Đăng nhập</h2>
+    </div>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <form method="POST" novalidate>
+        {{ form.hidden_tag() }}
+
+        <div class="form-group">
+            {{ form.email.label }}
+            {{ form.email(class="form-control", placeholder="Nhập email của bạn") }}
+            {% if form.email.errors %}
+                <small class="text-danger">
+                    {% for error in form.email.errors %}
+                        {{ error }}<br>
+                    {% endfor %}
+                </small>
+            {% endif %}
+        </div>
+
+        <div class="form-group">
+            {{ form.password.label }}
+            {{ form.password(class="form-control password-field", placeholder="Nhập mật khẩu", id="password") }}
+            <div class="password-toggle">
+                <input type="checkbox" id="togglePassword">
+                <label for="togglePassword">Hiện mật khẩu</label>
+            </div>
+            {% if form.password.errors %}
+                <small class="text-danger">
+                    {% for error in form.password.errors %}
+                        {{ error }}<br>
+                    {% endfor %}
+                </small>
+            {% endif %}
+        </div>
+
+        <div class="form-group">
+            <button type="submit" class="btn btn-block">Đăng nhập</button>
+        </div>
+    </form>
+
+    <div class="auth-footer">
+        <p>Chưa có tài khoản? <a href="{{ url_for('main.register') }}">Đăng ký ngay</a></p>
+        
+    </div>
+
+    <div class="social-login">
+        <p>Hoặc đăng nhập bằng</p>
+        <a href="{{ url_for('main.google_login') }}" class="social-btn">
+            <i class="fab fa-google"></i> Google
+        </a>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script src="{{ url_for('static', filename='js/auth.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Tin nhắn bạn đã nhận</h2>
+
+{% if messages %}
+  <ul style="list-style:none; padding:0;">
+    {% for msg in messages %}
+      <li style="margin-bottom:15px; padding:10px; border:1px solid #ccc; border-radius:8px; background:#f7f7f7;">
+        <strong>Người gửi: {{ msg.sender.username }}</strong><br>
+        <small style="color:gray;">
+          {{ msg.created_at_hn.strftime('%d/%m/%Y %H:%M') if msg.created_at_hn else 'N/A' }}
+        </small><br>
+        <p>{{ msg.content|e }}</p>
+        <a href="{{ url_for('main.messages', friend_id=msg.sender.id) }}" class="btn btn-sm btn-primary">Trả lời</a>
+      </li>
+    {% endfor %}
+  </ul>
+{% else %}
+  <p>Bạn chưa nhận được tin nhắn nào.</p>
+{% endif %}
+
+{% endblock %}

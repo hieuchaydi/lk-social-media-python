@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="profile-container container">
+  <h2 class="profile-title">Trang cá nhân</h2>
+
+  <nav class="profile-nav">
+    <ul class="social-links">
+      <li><a href="{{ url_for('main.friend_requests') }}">📨 Lời mời kết bạn</a></li>
+      <li><a href="{{ url_for('main.friends') }}">👥 Danh sách bạn bè</a></li>
+      <li><a href="{{ url_for('main.search_friends') }}">🔍 Tìm kiếm bạn bè</a></li>
+      <li><a href="{{ url_for('main.received_messages') }}">✉️ Tin nhắn đã nhận</a></li>
+    </ul>
+    <div class="quick-links">
+      <a href="{{ url_for('main.feed') }}">📰 Bảng tin</a>
+      <span>|</span>
+      <a href="{{ url_for('main.create_post') }}">➕ Đăng bài</a>
+    </div>
+  </nav>
+
+  <hr class="divider">
+
+  <div class="profile-content">
+    <div class="avatar-section">
+      <label>Ảnh đại diện hiện tại:</label>
+      <img src="{{ url_for('static', filename='avatars/' + (current_user.avatar or 'default.jpg')) }}"
+           alt="Avatar" class="avatar-img">
+    </div>
+
+    <form method="POST" enctype="multipart/form-data" class="profile-form">
+      {{ form.hidden_tag() }}
+
+      <div class="form-group">
+        <label for="username">Tên người dùng:</label>
+        {{ form.username(class="form-control", id="username", size=32) }}
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email:</label>
+        {{ form.email(class="form-control", id="email", size=32) }}
+      </div>
+
+      <div class="form-group">
+        <label for="avatar">Cập nhật ảnh đại diện:</label>
+        {{ form.avatar(class="form-control-file", id="avatar") }}
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-submit">{{ form.submit.label.text }}</button>
+    </form>
+  </div>
+</div>
+{% endblock %}

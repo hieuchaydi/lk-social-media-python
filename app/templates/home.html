@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container main-content">
+  <h2>Bảng tin</h2>
+
+  <!-- Top Users Leaderboard -->
+ 
+
+  {% set featured_post = posts[0] if posts and posts[0].get_daily_likes() > 0 else None %}
+  
+  <!-- Bài viết nổi bật trong ngày -->
+  {% if featured_post %}
+  <div class="featured-post card mb-3">
+    <div class="card-header bg-primary text-white">
+      <h4>🔥 Bài viết nổi bật hôm nay</h4>
+    </div>
+    <div class="post-card featured">
+      <div class="post-header d-flex items-center">
+        <img src="{{ url_for('static', filename='avatars/' + (featured_post.user.avatar or 'default.jpg')) }}"
+             alt="{{ featured_post.user.username }}" class="post-avatar">
+        <div class="post-user">
+          <a href="{{ url_for('main.profile', username=featured_post.user.username) }}" class="post-username">{{ featured_post.user.username }}</a>
+          <span class="post-time text-muted">
+            {{ featured_post.created_at_hn.strftime('%Y-%m-%d %H:%M') if featured_post.created_at_hn else 'N/A' }}
+          </span>
+        </div>
+      </div>
+      <div class="post-content">
+        <p>{{ featured_post.content }}</p>
+        {% if featured_post.image %}
+        <img src="{{ url_for('static', filename='uploads/' + featured_post.image) }}" alt="Post image" class="post-image">
+        {% endif %}
+      </div>
+      <div class="post-actions d-flex gap-1">
+        <button class="btn-like {% if current_user.is_authenticated and featured_post.likes|selectattr('user_id', 'equalto', current_user.id)|list %}liked{% endif %}"
+                data-post-id="{{ featured_post.id }}">❤️ {{ featured_post.get_daily_likes() }} (hôm nay)</button>
+        <a href="{{ url_for('main.post_detail', post_id=featured_post.id) }}" class="btn btn-outline btn-sm">💬 Bình luận</a>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+
+  <!-- Các bài viết khác -->
+  {% for post in posts %}
+    {% if not featured_post or post.id != featured_post.id %}
+    <div class="post-card">
+      <div class="post-header d-flex items-center">
+        <img src="{{ url_for('static', filename='avatars/' + (post.user.avatar or 'default.jpg')) }}"
+             alt="{{ post.user.username }}" class="post-avatar">
+        <div class="post-user">
+          <a href="{{ url_for('main.profile', username=post.user.username) }}" class="post-username">{{ post.user.username }}</a>
+          <span class="post-time text-muted">
+            {{ post.created_at_hn.strftime('%Y-%m-%d %H:%M') if post.created_at_hn else 'N/A' }}
+          </span>
+        </div>
+      </div>
+      <div class="post-content">
+        <p>{{ post.content }}</p>
+        {% if post.image %}
+        <img src="{{ url_for('static', filename='uploads/' + post.image) }}" alt="Post image" class="post-image">
+        {% endif %}
+      </div>
+      <div class="post-actions d-flex gap-1">
+        <button class="btn-like {% if current_user.is_authenticated and post.likes|selectattr('user_id', 'equalto', current_user.id)|list %}liked{% endif %}"
+                data-post-id="{{ post.id }}">❤️ {{ post.like_count() }}</button>
+        <a href="{{ url_for('main.post_detail', post_id=post.id) }}" class="btn btn-outline btn-sm">💬 Bình luận</a>
+      </div>
+    </div>
+    {% endif %}
+  {% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,303 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>👥 Danh sách bạn bè</h2>
+
+{% if friends %}
+  <ul class="list-group">
+    {% for friend in friends %}
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        <div class="d-flex align-items-center">
+          <img src="{{ url_for('static', filename='avatars/' + (friend.avatar or 'default.jpg')) }}" width="40" height="40" style="border-radius:50%; object-fit: cover; margin-right: 10px;">
+          <span>{{ friend.username }}</span>
+        </div>
+        <div>
+          <a href="{{ url_for('main.chat', friend_id=friend.id) }}" class="btn btn-outline-success btn-sm me-2">
+            Nhắn tin với {{ friend.username }}
+          </a>
+          <button class="btn btn-outline-primary btn-sm btn-call" data-friend-id="{{ friend.id }}" data-friend-username="{{ friend.username }}">
+            Gọi thoại
+          </button>
+        </div>
+      </li>
+    {% endfor %}
+  </ul>
+{% else %}
+  <p>Bạn chưa có người bạn nào.</p>
+{% endif %}
+
+<!-- Modal gọi thoại -->
+<div id="callModal" class="modal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content p-3">
+      <h5>Gọi thoại với <span id="callFriendName"></span></h5>
+      <div class="mb-3">
+        <button id="startCall" class="btn btn-primary">Bắt đầu gọi</button>
+        <button id="endCall" class="btn btn-danger" disabled>Kết thúc gọi</button>
+      </div>
+      <audio id="remoteAudio" autoplay></audio>
+      <div id="callStatus" class="alert alert-info d-none"></div>
+      <button id="closeCall" class="btn btn-secondary mt-3">Đóng</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.0/socket.io.min.js"></script>
+<script>
+  const socket = io();
+  const currentUserId = {{ current_user_id }};
+  let peerConnection = null;
+  let callStartTime = null;
+  let roomId = null;
+  let friendId = null;
+  let friendName = null;
+
+  // UI elements
+  const callModal = document.getElementById('callModal');
+  const callFriendNameSpan = document.getElementById('callFriendName');
+  const remoteAudio = document.getElementById('remoteAudio');
+  const startCallBtn = document.getElementById('startCall');
+  const endCallBtn = document.getElementById('endCall');
+  const callStatus = document.getElementById('callStatus');
+  const closeCallBtn = document.getElementById('closeCall');
+
+  // Hiển thị trạng thái cuộc gọi
+  function updateStatus(message, type='info') {
+    callStatus.textContent = message;
+    callStatus.className = `alert alert-${type}`;
+    callStatus.classList.remove('d-none');
+  }
+
+  // Ẩn modal gọi thoại
+  function hideCallModal() {
+    callModal.classList.remove('show');
+    callModal.style.display = 'none';
+    callModal.setAttribute('aria-hidden', 'true');
+  }
+
+  // Hiện modal gọi thoại
+  function showCallModal() {
+    callModal.style.display = 'flex';
+    callModal.classList.add('show');
+    callModal.setAttribute('aria-hidden', 'false');
+  }
+
+  // Đặt lại kết nối peer
+  function resetPeerConnection() {
+    if (peerConnection) {
+      peerConnection.ontrack = null;
+      peerConnection.onicecandidate = null;
+      peerConnection.close();
+      peerConnection = null;
+    }
+    remoteAudio.srcObject = null;
+  }
+
+  // Khởi tạo kết nối peer
+  function initPeerConnection() {
+    resetPeerConnection();
+    peerConnection = new RTCPeerConnection({
+      iceServers: [{ urls: 'stun:stun.l.google.com:19302' }]
+    });
+
+    peerConnection.ontrack = event => {
+      remoteAudio.srcObject = event.streams[0];
+      updateStatus(`Đã kết nối âm thanh với ${friendName}`);
+    };
+
+    peerConnection.onicecandidate = event => {
+      if (event.candidate) {
+        socket.emit('ice_candidate', {
+          room_id: roomId,
+          candidate: event.candidate,
+          user_id: currentUserId,
+          to_user: friendId
+        });
+      }
+    };
+  }
+
+  // Bắt đầu gọi
+  startCallBtn.addEventListener('click', async (e) => {
+    e.preventDefault();
+    try {
+      initPeerConnection();
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      stream.getTracks().forEach(track => peerConnection.addTrack(track, stream));
+
+      const offer = await peerConnection.createOffer();
+      await peerConnection.setLocalDescription(offer);
+
+      socket.emit('offer', {
+        room_id: roomId,
+        offer: offer,
+        user_id: currentUserId,
+        to_user: friendId
+      });
+
+      callStartTime = new Date();
+      startCallBtn.disabled = true;
+      endCallBtn.disabled = false;
+      updateStatus(`Đang chờ ${friendName} tham gia...`);
+    } catch (err) {
+      console.error(err);
+      updateStatus('Không thể bắt đầu cuộc gọi. Vui lòng kiểm tra micro.', 'danger');
+    }
+  });
+
+  // Kết thúc gọi
+  endCallBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    const duration = callStartTime ? Math.round((new Date() - callStartTime) / 1000) : 0;
+    socket.emit('leave_call', {
+      room_id: roomId,
+      user_id: currentUserId,
+      friend_id: friendId,
+      duration: duration
+    });
+
+    resetPeerConnection();
+    startCallBtn.disabled = false;
+    endCallBtn.disabled = true;
+    updateStatus('Cuộc gọi đã kết thúc.', 'info');
+  });
+
+  // Đóng modal gọi
+  closeCallBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    if (!endCallBtn.disabled) {
+      // Nếu cuộc gọi đang diễn ra thì kết thúc trước
+      endCallBtn.click();
+    }
+    hideCallModal();
+    resetPeerConnection();
+  });
+
+  // Khi click nút gọi thoại trên danh sách bạn bè
+  document.querySelectorAll('.btn-call').forEach(btn => {
+    btn.addEventListener('click', async (e) => {
+      e.preventDefault();
+
+      friendId = btn.getAttribute('data-friend-id');
+      friendName = btn.getAttribute('data-friend-username');
+
+      try {
+        // Lấy thông tin call từ API
+        const response = await fetch(`/call_info/${friendId}`);
+        if (!response.ok) {
+          const err = await response.json();
+          alert(err.error || 'Lỗi khi lấy thông tin gọi.');
+          return;
+        }
+        const data = await response.json();
+        roomId = data.room_id;
+
+        callFriendNameSpan.textContent = friendName;
+        startCallBtn.disabled = false;
+        endCallBtn.disabled = true;
+        callStatus.classList.add('d-none');
+        remoteAudio.srcObject = null;
+        showCallModal();
+
+        // Tham gia phòng gọi
+        socket.emit('join_call', { room_id: roomId, user_id: currentUserId });
+      } catch (error) {
+        console.error('Lỗi khi gọi API call_info:', error);
+        alert('Không thể lấy thông tin cuộc gọi.');
+      }
+    });
+  });
+
+  // Socket events
+
+  socket.on('user_joined', data => {
+    if (data.user_id !== currentUserId) {
+      updateStatus(`${friendName} đã tham gia cuộc gọi.`);
+    }
+  });
+
+  socket.on('offer', async data => {
+    if (data.user_id !== currentUserId) {
+      try {
+        initPeerConnection();
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        stream.getTracks().forEach(track => peerConnection.addTrack(track, stream));
+
+        await peerConnection.setRemoteDescription(new RTCSessionDescription(data.offer));
+        const answer = await peerConnection.createAnswer();
+        await peerConnection.setLocalDescription(answer);
+
+        socket.emit('answer', {
+          room_id: roomId,
+          answer: answer,
+          user_id: currentUserId,
+          to_user: data.user_id
+        });
+
+        callStartTime = new Date();
+      } catch (err) {
+        console.error('Error handling offer:', err);
+        updateStatus('Lỗi khi nhận lời mời gọi.', 'danger');
+      }
+    }
+  });
+
+  socket.on('answer', async data => {
+    if (data.user_id !== currentUserId && peerConnection) {
+      try {
+        await peerConnection.setRemoteDescription(new RTCSessionDescription(data.answer));
+      } catch (err) {
+        console.error('Error setting remote answer:', err);
+      }
+    }
+  });
+
+  socket.on('ice_candidate', async data => {
+    if (data.user_id !== currentUserId && peerConnection) {
+      try {
+        await peerConnection.addIceCandidate(new RTCIceCandidate(data.candidate));
+      } catch (err) {
+        console.error('Error handling ICE candidate:', err);
+      }
+    }
+  });
+
+  socket.on('user_left', data => {
+    if (data.user_id !== currentUserId) {
+      resetPeerConnection();
+      startCallBtn.disabled = false;
+      endCallBtn.disabled = true;
+      updateStatus(`${friendName} đã rời khỏi cuộc gọi.`, 'info');
+    }
+  });
+</script>
+
+<style>
+/* Modal kiểu bootstrap-like */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.5);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 1050;
+}
+
+.modal.show {
+  display: flex;
+}
+
+.modal-dialog {
+  background: #fff;
+  border-radius: 6px;
+  max-width: 400px;
+  width: 100%;
+  box-shadow: 0 5px 15px rgba(0,0,0,.5);
+  padding: 1rem;
+}
+</style>
+{% endblock %}

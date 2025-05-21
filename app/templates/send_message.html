@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Gửi tin nhắn đến {{ receiver_username }}</h2>
+
+<form method="POST">
+    {{ form.hidden_tag() }}
+    <div class="form-group">
+        {{ form.content.label }}<br>
+        {{ form.content(rows=4, class="form-control", placeholder="Nhập nội dung tin nhắn...") }}
+    </div>
+    <button type="submit" class="btn btn-primary mt-2">Gửi</button>
+</form>
+{% endblock %}
+<!--send_message.htmlhtml-->

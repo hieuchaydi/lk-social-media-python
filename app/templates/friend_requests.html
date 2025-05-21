@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %}Lời mời kết bạn{% endblock %}
+
+{% block content %}
+  <h2>Lời mời kết bạn</h2>
+
+  {% if friend_requests %}
+    <ul>
+    {% for fr in friend_requests %}
+      <li>
+        <strong>{{ fr.user.username }}</strong> muốn kết bạn với bạn.
+        <form method="POST" action="{{ url_for('main.respond_friend_request', request_id=fr.id, action='accept') }}" style="display:inline;">
+          {{ form.csrf_token }}
+          <button type="submit" class="btn btn-success btn-sm">Chấp nhận</button>
+        </form>
+        <form method="POST" action="{{ url_for('main.respond_friend_request', request_id=fr.id, action='reject') }}" style="display:inline;">
+          {{ form.csrf_token }}
+          <button type="submit" class="btn btn-danger btn-sm">Từ chối</button>
+        </form>
+      </li>
+    {% endfor %}
+    </ul>
+  {% else %}
+    <p>Hiện tại không có lời mời kết bạn nào.</p>
+  {% endif %}
+{% endblock %}

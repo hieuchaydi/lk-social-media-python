@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Bài viết mới</h2>
+
+{% macro render_comment(comment, post) %}
+<div class="comment" id="comment-{{ comment.id }}">
+    <div class="comment-header">
+        <img src="{{ url_for('static', filename='avatars/' + (comment.user.avatar or 'default.jpg')) }}" 
+             class="comment-avatar" alt="{{ comment.user.username }}">
+        <a href="{{ url_for('main.user_profile', user_id=comment.user.id) }}" class="comment-username">
+            {{ comment.user.username }}
+        </a>
+        <span class="comment-time">
+            {{ comment.created_at.strftime('%H:%M %d/%m') if comment.created_at else 'N/A' }}
+        </span>
+    </div>
+    
+    <div class="comment-content">
+        {{ comment.content }}
+    </div>
+    
+    <div class="comment-actions">
+        <!-- Like bình luận -->
+        <form method="POST" action="{{ url_for('main.like_comment', comment_id=comment.id) }}" class="like-comment-form">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <button type="submit" class="btn-like-comment {% if current_user in comment.liked_by %}liked{% endif %}">
+                <span class="heart-icon">❤️</span>
+                <span class="like-count">{{ comment.like_count() }}</span>
+            </button>
+        </form>
+        
+        <!-- Nút trả lời -->
+        <button class="btn-reply" data-comment-id="{{ comment.id }}">Trả lời</button>
+        
+        <!-- Nút xóa (nếu có quyền) -->
+        {% if comment.user_id == current_user.id or post.user_id == current_user.id %}
+        <form method="POST" action="{{ url_for('main.delete_comment', comment_id=comment.id) }}" class="delete-comment-form">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <button type="submit" class="btn-delete-comment">Xóa</button>
+        </form>
+        {% endif %}
+    </div>
+    
+    <!-- Form trả lời (ẩn) -->
+    <form method="POST" action="{{ url_for('main.reply_comment', comment_id=comment.id) }}" 
+          class="reply-form" id="reply-form-{{ comment.id }}" style="display: none;">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <textarea name="content" placeholder="Viết phản hồi..." required></textarea>
+        <button type="submit">Gửi</button>
+        <button type="button" class="btn-cancel-reply" data-comment-id="{{ comment.id }}">Hủy</button>
+    </form>
+    
+    <!-- Danh sách phản hồi -->
+    <div class="replies" style="margin-left: 20px;">
+        {% for reply in comment.replies|sort(attribute='created_at') %}
+            {{ render_comment(reply, post) }}
+        {% endfor %}
+    </div>
+</div>
+{% endmacro %}
+
+{% for post in posts %}
+<div class="post" id="post-{{ post.id }}">
+    <!-- Header bài viết -->
+    <div class="post-header">
+        <img src="{{ url_for('static', filename='avatars/' + (post.user.avatar or 'default.jpg')) }}" 
+             class="post-avatar" alt="{{ post.user.username }}">
+        <a href="{{ url_for('main.user_profile', user_id=post.user.id) }}" class="post-username">
+            {{ post.user.username }}
+        </a>
+        <span class="post-time">
+            {{ post.created_at.strftime('%d/%m/%Y %H:%M') if post.created_at else 'N/A' }}
+        </span>
+    </div>
+    
+    <!-- Nội dung bài viết -->
+    <div class="post-content">
+        <p>{{ post.content }}</p>
+    </div>
+
+    <!-- Ảnh bài viết -->
+    {% if post.image %}
+        <img src="{{ url_for('static', filename='uploads/' + post.image) }}" class="post-image">
+    {% endif %}
+
+    <!-- Like bài viết -->
+    <div class="post-actions">
+        <form method="POST" action="{{ url_for('main.like_post', post_id=post.id) }}" class="like-form">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <button type="submit" class="btn-like {% if current_user.is_authenticated and current_user in post.likes %}liked{% endif %}">
+                <span class="heart-icon">❤️</span>
+                <span class="like-count">{{ post.like_count() }}</span>
+            </button>
+        </form>
+        <a href="{{ url_for('main.post_detail', post_id=post.id) }}" class="btn btn-outline btn-sm">💬 Bình luận</a>
+    </div>
+
+    <!-- Form bình luận chính -->
+    <form method="POST" action="{{ url_for('main.comment', post_id=post.id) }}" class="comment-form">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <textarea name="content" placeholder="Viết bình luận..." required></textarea>
+        <button type="submit">Gửi</button>
+    </form>
+
+    <!-- Danh sách bình luận gốc (không có parent_id) -->
+    <div class="comments">
+        {% for comment in post.comments|sort(attribute='created_at') if not comment.parent_id %}
+            {{ render_comment(comment, post) }}
+        {% endfor %}
+    </div>
+</div>
+{% endfor %}
+
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/comments.js') }}"></script>
+{% endblock %}

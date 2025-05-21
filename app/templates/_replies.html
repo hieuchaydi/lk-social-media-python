@@ -1,0 +1,6 @@
+{% for reply in comment.replies %}
+<div class="reply mt-2 ps-4 border-start">
+    <strong>{{ reply.user.username }}</strong>: {{ reply.content }}
+    <div class="text-muted small">{{ reply.timestamp.strftime('%d/%m/%Y %H:%M') }}</div>
+</div>
+{% endfor %}

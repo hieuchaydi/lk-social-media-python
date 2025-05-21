@@ -1,0 +1,815 @@
+/* ================ BASE STYLES ================ */
+:root {
+  /* Color Variables */
+  --primary-color: #405DE6;
+  --secondary-color: #5851DB;
+  --accent-color: #833AB4;
+  --red: #ed4956;
+  --green: #4CAF50;
+  
+  /* Light Mode Colors */
+  --bg-color: #ffffff;
+  --text-color: #262626;
+  --light-gray: #fafafa;
+  --medium-gray: #dbdbdb;
+  --dark-gray: #8e8e8e;
+  --border-color: #dbdbdb;
+  --header-bg: #ffffff;
+  --comment-bg: #f5f5f5;
+  --card-bg: #ffffff;
+  
+  /* Button Colors */
+  --btn-bg: #e0e0e0;
+  --btn-text: #262626;
+  --btn-primary-bg: #405DE6;
+  --btn-primary-text: #ffffff;
+  --btn-danger-bg: #dc3545;
+}
+
+/* Dark Mode Colors */
+body.dark-mode {
+  --bg-color: #121212;
+  --text-color: #e0e0e0;
+  --light-gray: #1a1a1a;
+  --medium-gray: #333333;
+  --dark-gray: #8e8e8e;
+  --border-color: #444444;
+  --header-bg: #1f1f1f;
+  --comment-bg: #222222;
+  --card-bg: #1e1e1e;
+  
+  --btn-bg: #333333;
+  --btn-text: #e0e0e0;
+  --btn-primary-bg: #3388ff;
+}
+
+/* Base Styles */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  line-height: 1.6;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+a {
+  color: var(--primary-color);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+ul {
+  list-style: none;
+}
+
+/* ================ LAYOUT & CONTAINERS ================ */
+.container {
+  max-width: 935px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.main-content {
+  padding: 30px 0;
+}
+
+.profile-container {
+  max-width: 800px;
+}
+
+/* ================ TYPOGRAPHY ================ */
+h1, h2, h3, h4 {
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+h2 {
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+/* ================ COMPONENTS ================ */
+/* Cards */
+.card {
+  background-color: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.post-card {
+  background-color: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+/* Buttons */
+.btn {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  font-weight: 600;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: center;
+  border: none;
+}
+
+.btn-primary {
+  background-color: var(--btn-primary-bg);
+  color: var(--btn-primary-text);
+}
+
+.btn-primary:hover {
+  background-color: var(--secondary-color);
+}
+
+.btn-outline {
+  background: transparent;
+  border: 1px solid var(--primary-color);
+  color: var(--primary-color);
+}
+
+.btn-outline:hover {
+  background-color: var(--primary-color);
+  color: var(--white);
+}
+
+.btn-danger {
+  background-color: var(--btn-danger-bg);
+  color: white;
+}
+
+.btn-sm {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+}
+
+.btn-success {
+  background-color: var(--green);
+  color: white;
+}
+
+/* ================ AVATAR OPTIMIZATION ================ */
+.avatar {
+  --avatar-size: 32px;
+  width: var(--avatar-size);
+  height: var(--avatar-size);
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: center;
+  aspect-ratio: 1/1; /* Ensure perfect square */
+  display: block;
+  
+  /* Optimize image rendering */
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+  -ms-interpolation-mode: bicubic;
+
+  /* Smooth scaling */
+  backface-visibility: hidden;
+  transform: translateZ(0);
+  will-change: transform;
+}
+
+/* Avatar Sizes */
+.avatar-xs {
+  --avatar-size: 24px;
+}
+
+.avatar-sm {
+  --avatar-size: 32px;
+}
+
+.avatar-md {
+  --avatar-size: 48px;
+}
+
+.avatar-lg {
+  --avatar-size: 64px;
+}
+
+.avatar-xl {
+  --avatar-size: 96px;
+}
+
+/* Avatar Variations */
+.avatar-square {
+  border-radius: 8px;
+}
+
+.avatar-bordered {
+  border: 2px solid var(--white);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+}
+
+.avatar-group {
+  display: flex;
+  align-items: center;
+}
+
+/* Stacked avatars for groups */
+.avatar-stack {
+  display: flex;
+}
+
+.avatar-stack .avatar {
+  margin-left: -8px;
+  border: 2px solid var(--card-bg);
+}
+
+.avatar-stack .avatar:first-child {
+  margin-left: 0;
+}
+
+/* Lazy loading for avatars */
+.avatar[data-src] {
+  background-color: var(--medium-gray);
+  background-image: linear-gradient(45deg, var(--medium-gray) 25%, transparent 25%, transparent 75%, var(--medium-gray) 75%),
+                    linear-gradient(45deg, var(--medium-gray) 25%, transparent 25%, transparent 75%, var(--medium-gray) 75%);
+  background-size: 16px 16px;
+  background-position: 0 0, 8px 8px;
+}
+
+/* Avatar status indicators */
+.avatar-status {
+  position: relative;
+}
+
+.avatar-status::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 2px solid var(--white);
+}
+
+.avatar-status.online::after {
+  background-color: var(--green);
+}
+
+.avatar-status.offline::after {
+  background-color: var(--dark-gray);
+}
+
+.avatar-status.busy::after {
+  background-color: var(--red);
+}
+
+/* Avatar placeholder for empty states */
+.avatar-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--medium-gray);
+  color: var(--dark-gray);
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+/* Responsive avatars */
+@media (max-width: 768px) {
+  .avatar-lg {
+    --avatar-size: 48px;
+  }
+  
+  .avatar-xl {
+    --avatar-size: 64px;
+  }
+}
+
+/* Print styles */
+@media print {
+  .avatar {
+    filter: grayscale(100%);
+  }
+}
+
+/* Avatar trong bài viết */
+.post-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 12px;
+}
+
+/* Avatar trong bình luận */
+.comment-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 10px;
+}
+
+/* Đảm bảo hình ảnh không vượt quá kích thước */
+img {
+  max-width: 100%;
+  height: auto;
+}
+/* Post header */
+.post-header {
+  display: flex;
+  align-items: center;
+  padding: 14px 16px;
+}
+
+/* Comment header */
+.comment-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+/* Tạo khoảng cách đều */
+.post {
+  margin-bottom: 24px;
+}
+
+/* Làm mượt hover */
+.post-avatar, .comment-avatar {
+  transition: transform 0.2s ease;
+}
+
+.post-avatar:hover, .comment-avatar:hover {
+  transform: scale(1.05);
+}
+/* Forms */
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.form-control {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  font-family: inherit;
+}
+
+.form-control-file {
+  display: block;
+  width: 100%;
+}
+
+textarea.form-control {
+  min-height: 100px;
+  resize: vertical;
+}
+
+/* Alerts */
+.alert {
+  padding: 0.75rem 1rem;
+  margin-bottom: 1rem;
+  border-radius: 4px;
+}
+
+.alert-error {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+.alert-success {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+/* ================ NAVBAR ================ */
+.navbar {
+  background-color: var(--header-bg);
+  border-bottom: 1px solid var(--border-color);
+  padding: 10px 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.navbar .container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--text-color);
+  font-family: 'Billabong', cursive;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* ================ POST STYLES ================ */
+.post {
+  background-color: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  overflow: hidden;
+}
+
+.post-header {
+  display: flex;
+  align-items: center;
+  padding: 14px 16px;
+}
+
+.post-user {
+  display: flex;
+  align-items: center;
+  flex-grow: 1;
+}
+
+.post-username {
+  font-weight: 600;
+  margin-right: 0.5rem;
+}
+
+.post-time {
+  color: var(--dark-gray);
+  font-size: 0.75rem;
+}
+
+.post-image {
+  width: 100%;
+  max-height: 600px;
+  object-fit: contain;
+}
+
+.post-actions {
+  padding: 0.5rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.post-actions button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.5rem;
+  padding: 0.25rem;
+}
+
+.btn-like.liked {
+  color: var(--red);
+}
+
+/* ================ COMMENTS ================ */
+.comments {
+  padding: 0 1rem 1rem;
+}
+
+.comment {
+  margin-bottom: 0.75rem;
+  font-size: 0.875rem;
+  background-color: var(--comment-bg);
+  padding: 0.75rem;
+  border-radius: 8px;
+}
+
+.comment-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.25rem;
+}
+
+.comment-username {
+  font-weight: 600;
+  margin-right: 0.5rem;
+}
+
+.comment-time {
+  color: var(--dark-gray);
+  font-size: 0.75rem;
+}
+
+.comment-content {
+  margin-left: 38px;
+  margin-bottom: 0.5rem;
+}
+
+.comment-actions {
+  margin-left: 38px;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.replies {
+  margin-left: 38px;
+  border-left: 1px solid var(--border-color);
+  padding-left: 12px;
+}
+
+.comment-form {
+  display: flex;
+  padding: 1rem;
+  border-top: 1px solid var(--border-color);
+}
+
+.comment-form input {
+  flex: 1;
+  border: none;
+  outline: none;
+  padding: 0.5rem;
+  background: transparent;
+  color: var(--text-color);
+}
+
+.comment-form button {
+  background: none;
+  border: none;
+  color: var(--primary-color);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.reply-form {
+  margin-top: 0.5rem;
+  display: none;
+}
+
+/* ================ CHAT STYLES ================ */
+.chat-box {
+  background-color: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  height: 400px;
+  overflow-y: auto;
+}
+
+.message-item {
+  margin-bottom: 0.75rem;
+  clear: both;
+}
+
+.message-content {
+  display: inline-block;
+  max-width: 70%;
+  padding: 0.5rem 0.75rem;
+  border-radius: 18px;
+  font-size: 0.875rem;
+}
+
+.sent {
+  background-color: var(--primary-color);
+  color: white;
+  float: right;
+}
+
+.received {
+  background-color: var(--medium-gray);
+  float: left;
+}
+
+.message-time {
+  font-size: 0.75rem;
+  color: var(--dark-gray);
+  clear: both;
+}
+
+/* ================ FRIENDS & REQUESTS ================ */
+.list-group {
+  margin-bottom: 1.5rem;
+}
+
+.list-group-item {
+  background-color: var(--card-bg);
+  border: 1px solid var(--border-color);
+  padding: 0.75rem 1rem;
+  margin-bottom: 0.5rem;
+  border-radius: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.friend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.friend-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+/* ================ PROFILE STYLES ================ */
+.profile-nav {
+  margin-bottom: 1.5rem;
+}
+
+.social-links {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+
+.quick-links {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.divider {
+  border: none;
+  border-top: 1px solid var(--border-color);
+  margin: 1rem 0;
+}
+
+.profile-form {
+  max-width: 500px;
+}
+
+/* ================ PAGINATION ================ */
+.pagination {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 1.5rem;
+}
+
+.pagination a {
+  padding: 0.25rem 0.5rem;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+}
+
+/* ================ UTILITY CLASSES ================ */
+.d-flex {
+  display: flex;
+}
+
+.items-center {
+  align-items: center;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+.gap-1 {
+  gap: 0.5rem;
+}
+
+.gap-2 {
+  gap: 1rem;
+}
+
+.mb-1 {
+  margin-bottom: 0.5rem;
+}
+
+.mb-2 {
+  margin-bottom: 1rem;
+}
+
+.mt-1 {
+  margin-top: 0.5rem;
+}
+
+.mt-2 {
+  margin-top: 1rem;
+}
+
+.text-muted {
+  color: var(--dark-gray);
+}
+
+.text-center {
+  text-align: center;
+}
+
+/* ================ CUSTOM FONT ================ */
+@font-face {
+  font-family: 'Billabong';
+  src: url('https://cdn.rawgit.com/milktronics/beaglegr.am/master/public/fonts/billabong-webfont.eot');
+  src: url('https://cdn.rawgit.com/milktronics/beaglegr.am/master/public/fonts/billabong-webfont.eot?#iefix') format('embedded-opentype'),
+       url('https://cdn.rawgit.com/milktronics/beaglegr.am/master/public/fonts/billabong-webfont.woff') format('woff'),
+       url('https://cdn.rawgit.com/milktronics/beaglegr.am/master/public/fonts/billabong-webfont.ttf') format('truetype'),
+       url('https://cdn.rawgit.com/milktronics/beaglegr.am/master/public/fonts/billabong-webfont.svg#billabongregular') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+/* static/css/interactions.css */
+.heart-animation {
+    position: absolute;
+    animation: heartFly 0.8s ease-out forwards;
+    color: #ff0000;
+    font-size: 1.5rem;
+    pointer-events: none;
+    z-index: 10;
+}
+
+@keyframes heartFly {
+    0% {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(-50px) scale(1.5);
+        opacity: 0;
+    }
+}
+
+.btn-like {
+    transition: all 0.2s;
+}
+
+.btn-like.liked {
+    color: #ff0000;
+    transform: scale(1.1);
+}
+
+.toast {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    padding: 12px 24px;
+    border-radius: 4px;
+    color: white;
+    z-index: 1000;
+    animation: fadeIn 0.3s;
+}
+
+.toast.success {
+    background-color: #28a745;
+}
+
+.toast.error {
+    background-color: #dc3545;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+.avatar-img {
+    width: 100px; /* Adjust this value to your desired size */
+    height: 100px; /* Adjust this value to your desired size */
+    object-fit: cover; /* Ensures the image scales nicely */
+    border-radius: 50%; /* Optional: makes the image circular */
+}
+#callModal .modal-dialog {
+    max-width: 800px;
+}
+
+#localVideo, #remoteVideo {
+    width: 100%;
+    height: 300px;
+    background: #000;
+    border-radius: 8px;
+    margin-bottom: 10px;
+}
+
+#localVideo {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    width: 150px;
+    height: 100px;
+}
+
+#callStatus {
+    font-size: 1.2em;
+    margin-top: 10px;
+}

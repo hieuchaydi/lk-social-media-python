@@ -14,7 +14,7 @@ lk là một ứng dụng mạng xã hội mini được phát triển bằng Py
 
 ### 1. Đăng nhập / Đăng ký (Login / Register)
 - Hỗ trợ đăng nhập bằng Google OAuth 2.0 với ảnh đại diện người dùng
-- Callback URL: `https://yourdomain.com/google/callback`
+- Callback URL: `http://127.0.0.1:5000/google/callback`
 - Đăng ký tài khoản thông thường với xác thực email
 
 ![Đăng nhập](assets/dangnhapgoogle.png)

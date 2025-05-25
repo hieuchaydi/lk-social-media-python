@@ -89,8 +89,8 @@
 
 ### 1. Tải Mã Nguồn
 ```bash
-git clone https://github.com/hieuchaydi/lk-social.git
-cd lk-social
+git clone https://github.com/hieuchaydi/lk-social-media-python.git
+cd lk-social-media-python
 ```
 
 ### 2. (Tùy Chọn) Tạo Môi Trường Ảo
